@@ -48,14 +48,15 @@ export default function Home() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://bikeindex.org:443/api/v3/search?page=${startIndex}&per_page=${rowsPerPage}&distance=10&stolenness=stolen&query=${search}&access_token=eJW36PlqR9EmKWTEm0fm_iTrmL_wEk6FaBg78fIpg48`
+        `https://bikeindex.org:443/api/v3/search?page=${startIndex}&per_page=${rowsPerPage}&location=Munich&distance=10&stolenness=proximity&query=${search}&access_token=eJW36PlqR9EmKWTEm0fm_iTrmL_wEk6FaBg78fIpg48
+`
       );
       const newresponse = await axios.get(
-        `https://bikeindex.org:443/api/v3/search/count?location=IP&distance=10&stolenness=stolen&access_token=eJW36PlqR9EmKWTEm0fm_iTrmL_wEk6FaBg78fIpg48
+        `https://bikeindex.org:443/api/v3/search/count?location=Munich&distance=10&stolenness=stolen&access_token=eJW36PlqR9EmKWTEm0fm_iTrmL_wEk6FaBg78fIpg48
 `
       );
       const responseData = response.data.bikes;
-      const total = newresponse.data.stolen;
+      const total = newresponse.data.proximity;
       setData(responseData);
       setTotal(total);
       console.log(data);
@@ -174,6 +175,7 @@ export default function Home() {
               }
               onClick={() => {
                 setStartIndex(startIndex - 1);
+                setEndIndex(endIndex - 10);
               }}
             />
           </PaginationItem>
@@ -181,10 +183,11 @@ export default function Home() {
           <PaginationItem>
             <PaginationNext
               className={
-                endIndex === 1100 ? "pointer-events-none opacity-50" : undefined
+                endIndex > 31 ? "pointer-events-none opacity-50" : undefined
               }
               onClick={() => {
                 setStartIndex(startIndex + 1); //10
+                setEndIndex(endIndex + 10);
               }}
             />
           </PaginationItem>
